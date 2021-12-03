@@ -1,12 +1,12 @@
 package exception_example;
 
-import runtime_exception.Thermostat;
 
 public class App {
 	public static void main(String[] args) throws InterruptedException {
-		Thermostat stat = new Thermostat();
-		
-		stat.setTemperature(36);
+		//자바 예외
+		System.out.println("하나");
+		Thread.sleep(2000); //2초대기 => 예외처리 해야함
+		System.out.println("둘");
 	}
 
 }

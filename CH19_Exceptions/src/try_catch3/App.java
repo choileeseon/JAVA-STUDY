@@ -3,12 +3,12 @@ package try_catch3;
 import java.util.Scanner;
 
 public class App {
-	private static Scanner scanner = new Scanner(System.in);
+	private static Scanner scanner = new Scanner(System.in); //?????static붙이기 조심 
 
 	public static void main(String[] args) {
 		// 예외를 처리하는 try-catch문
 		
-		int number = getNumber();
+		int number = getNumber(); //아래의 리턴값을 number에 넣고 출력
 		System.out.println("입력한 숫자는 : " + number);
 		scanner.close();
 			
@@ -30,7 +30,7 @@ public class App {
 				System.out.println("정수로 변환 할수 없습니다.");
 			}
 			
-		}while (!isNumber); //참이여야 빠져나옴
+		}while (!isNumber); //거짓이여야 빠져나옴
 		
 		return number;
 		
