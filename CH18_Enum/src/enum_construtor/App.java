@@ -1,7 +1,5 @@
 package enum_construtor;
 
-import enum_methods.Fruit;
-
 public class App {
 
 	public static void main(String[] args) {

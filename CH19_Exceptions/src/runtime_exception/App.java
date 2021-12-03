@@ -1,4 +1,4 @@
-package throwing_exception;
+package runtime_exception;
 
 public class App {
 

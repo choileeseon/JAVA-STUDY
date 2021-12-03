@@ -1,4 +1,4 @@
-package throwing_execption2;
+package throwing_exception2;
 
 public class Thermostat {
 	//예외처리 throws는 해당 예외처리를 이 메소드를 호출할대 처리하도록 함

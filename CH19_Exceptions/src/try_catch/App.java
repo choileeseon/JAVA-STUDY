@@ -16,7 +16,7 @@ public class App {
 		boolean isNumber = false;
 		
 		try { //예외가 발생할 수 있는 코드를 적용
-			number = Integer.parseInt(line); //문자열을 정수로 변환
+			number = Integer.parseInt(line); //문자열 --> 정수로 변환
 			isNumber = true;
 //			Double.parseDouble(line); //문자열을 실수로 변환
 //			Float.parseFloat(line); //문자열을 플로트로 변환

@@ -1,4 +1,4 @@
-package throwing_execption2;
+package throwing_exception2;
 
 public class App {
 
