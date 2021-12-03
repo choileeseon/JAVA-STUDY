@@ -1,4 +1,4 @@
-package Super_Constructor;
+package super_Constructor;
 
 public class Employee extends Person{
 	public Employee() {
