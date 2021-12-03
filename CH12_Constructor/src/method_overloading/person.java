@@ -1,4 +1,4 @@
-package method_overloading;
+package method_Overloading;
 
 public class Person {
 	//이름이 같은 그리트 메소드가 2개

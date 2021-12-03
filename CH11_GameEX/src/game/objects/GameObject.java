@@ -11,8 +11,8 @@ public class GameObject {
 			/*	보 (2)*/ {-1,		 1,			 0}
 	};
 	//상대의(가위,바위,보)와 비교해서 결과 리턴
-	public int compareTo(GameObject ob) { // ob는 아무거나
-		return comparison[id][ob.id];  // ????
+	public int compareTo(GameObject ob) { // ob는 아무거나 // compareTo는 나 자신과 타 원소의 비교??
+		return comparison[id][ob.id];  
 	}
 	
 	protected int getId() { //아이디 수정은 상속한 클래스에서만 사용

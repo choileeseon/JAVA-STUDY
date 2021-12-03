@@ -1,6 +1,7 @@
 package enum_methods;
 
-public enum Fruit { //Keyword가 enum
-	APPLE,BANANA,ORANGE	//상수들의 집합
 
+public enum Fruit { //Keyword가 enum
+	APPLE,BANANA,ORANGE;
 }
+
