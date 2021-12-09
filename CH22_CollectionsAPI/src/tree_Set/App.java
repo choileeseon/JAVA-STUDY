@@ -18,7 +18,7 @@ class Person implements Comparable<Person> {
 }
 
 public class App {
-
+	//트리셋은 정렬 기능추가(반드시 Comparable 인터페이스를 구현한 클래스 객체입력)
 	public static void main(String[] args) {
 		// 트리셋은 정렬 기능추가
 		TreeSet<Person> people = new TreeSet<>();
