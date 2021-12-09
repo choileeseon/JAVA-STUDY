@@ -1,4 +1,4 @@
-package application;
+package Application;
 
 import javax.swing.SwingUtilities;
 import gui.MainFrame;
