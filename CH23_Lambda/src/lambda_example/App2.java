@@ -12,6 +12,6 @@ public class App2 {
 		System.out.println(run instanceof Runner); //run은 Runner의 객체?
 		System.out.println(run.getClass());	//클래식은 람다식
 	}
-	
 
 }
+

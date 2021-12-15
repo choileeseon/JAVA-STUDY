@@ -23,6 +23,7 @@ public class App3 {
 		
 		numbers.forEach(System.out::println);
 	}
+	
 	private static boolean filter(int n) {
 		return n < 5;
 	}

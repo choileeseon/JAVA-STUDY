@@ -22,7 +22,7 @@ public class RemoveIf {
 //				return i < 6; //정수가 6보다 작으면 참
 //			}
 //		});
-		
+		//왜 i x처럼 다르게 쓰여도같은 값을 쓰는건지???
 		numbers.removeIf(i -> i < 6);
 		numbers.forEach(x -> System.out.println(x));
 		
