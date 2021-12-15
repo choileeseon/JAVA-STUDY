@@ -16,11 +16,12 @@ public class App {
 		list.forEach(new Consumer<String>() {
 			public void accept(String t) {
 				// 익명 클래스에서 추상메서드를 구현
-				System.out.println(t+"\t");
+				System.out.print(t+"\t");
 			}
 		});
+		System.out.println();
 		// 익명 클래스 => 람다식으로
-		list.forEach(t -> System.out.println(t+"\t"));
+		list.forEach(t -> System.out.print(t+"\t"));
 	}
 	
 
