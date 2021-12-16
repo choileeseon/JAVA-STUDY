@@ -3,7 +3,7 @@ package application;
 import javax.swing.SwingUtilities;
 import gui.MainFrame;
 
-public class HelloWorld {
+public class App {
 
 	public static void main(String[] args) {
 		// 자바 스윙 프로그램
