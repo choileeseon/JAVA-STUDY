@@ -16,7 +16,7 @@ public class MyShop {
 	// 기존 계정 셋팅(메인 함수에서 변경하기)
 	public String[] existingUsers = new String[2];
 	private ArrayList<User> users = new ArrayList<>();
-	String newUser;
+	String newUser; //왜있는지 모르겠음???
 	
 	Product[] electronicProducts = new Product[3];
 	Product[] clothProducts = new Product[3];
