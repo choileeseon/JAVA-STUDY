@@ -39,11 +39,11 @@ public class Book {
 		this.time = time;
 	}
 
-	public String getId() {
+	public String getid() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setid(String id) {
 		this.id = id;
 	}
 

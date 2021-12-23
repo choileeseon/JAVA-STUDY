@@ -7,7 +7,7 @@ public class App {
 		Reservation reserve = new Reservation();
 
 		reserve.setTitle("페닌슐라");
-		reserve.initGreet();
+		reserve.reserveBtn();
 	}
 
 }
