@@ -48,13 +48,11 @@ public class Reservation {
 		System.out.println("==============");
 		System.out.println("회원 아이디를 입력해주세요");
 		System.out.println("회원 아이디 : ");
-		System.out.print("#  선택 -> ");
 		String user = scanner.nextLine(); 
 		
 		System.out.println("==============");
 		System.out.println("비밀번호를 입력해주세요");
 		System.out.println("회원 비번 : ");
-		System.out.print("#  선택 -> ");
 		String password = scanner.nextLine(); 
 		
 		//멤버 리스트에 저장하기

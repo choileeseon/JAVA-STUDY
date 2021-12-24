@@ -2,9 +2,9 @@ package buffet;
 
 public class Membership {
 	private String id;
-	private String password;
+	private int password;
 	
-	public Membership(String id, String password) {
+	public Membership(String id, int password) {
 		this.id = id;
 		this.password = password;
 	}
@@ -15,10 +15,10 @@ public class Membership {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getPassword() {
+	public int getPassword() {
 		return password;
 	}
-	public void setPassword(String password) {
+	public void setPassword(int password) {
 		this.password = password;
 	}
 	
