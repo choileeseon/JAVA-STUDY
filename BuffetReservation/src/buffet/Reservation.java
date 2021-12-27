@@ -164,7 +164,7 @@ public class Reservation {
 	// 회원은 password / 비회원은 전화번호 뒷자리
 	private int inputPassword(int mode) {
 		
-		String result2 = scanner.nextLine();
+		String result2 = "";
 		switch(mode) {
 			case 1 :
 				while(true) {
