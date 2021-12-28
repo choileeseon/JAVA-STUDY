@@ -5,11 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
-public class MemberMer {
+public class MemberMgr {
 	
 	private DBConnectionMgr pool;
 	
-	public MemberMer() {
+	public MemberMgr() {
 		try {
 			pool = DBConnectionMgr.getInstance();
 //			Connection con = pool.getConnection();
@@ -33,7 +33,7 @@ public class MemberMer {
 		Vector<ZipcodeBean> vlist = new Vector<>();
 		try {
 			//DB 연결 객체 
-			//DBConnectionMgr 생성 -> Connectio 만들어짐.
+			//DBConnectionMgr 생성 -> Connection 만들어짐.
 			//필요한곳에 빌려주고 반납받는 기법 : 풀링기법
 			con = pool.getConnection(); //빌려옴(pool 기법)
 			sql = "SELECT * FROM tblZipcode WHERE AREA3 LIKE ?"; //LIKE '%강남대로%'
@@ -42,11 +42,166 @@ public class MemberMer {
 			pstmt.setString(1, "%"+area3+"%"); //1이 sql문에 ? 순서를 뜻함.
 			rs = pstmt.executeQuery(); //실제 sql문 실행
 			while(rs.next()) {
-				String str = rs.getString(1) +"\t";
-				str+=rs.getString(2) +"\t";
-				str+=rs.getString(3) +"\t";
-				str+=rs.getString(4);
-				System.out.println(str);
+				ZipcodeBean bean = new ZipcodeBean();
+				bean.setZipcodel(rs.getString("zipcode"));
+				bean.setArea1(rs.getString("area1"));
+				bean.setArea2(rs.getString("area2"));
+				bean.setArea3(rs.getString("area3").trim());
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con,pstmt,rs);
+		}
+		return vlist;
+	}
+	
+	//가입
+	public boolean insert(MemberBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection(); //pool에서 Connection 빌려옴.
+			sql = "insert tblMember(name,phone,team,address)values(?,?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			// 4개의 ? 세팅
+			pstmt.setString(1, bean.getName()); //첫번쨰 물음표에 '홍길동' 세팅
+			pstmt.setString(2, bean.getPhone());
+			pstmt.setString(3, bean.getTeam());
+			pstmt.setString(4, bean.getAddress());
+			//실행 => 리턴값은 적용된 레코드 개수 -> 성공:1, 실패:0
+			int cnt = pstmt.executeUpdate();
+			if(cnt == 1)flag = true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con,pstmt);
+		}
+		return flag;
+	}
+	
+	//리스트
+	public Vector<MemberBean> list(){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<MemberBean> vlist = new Vector<>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from tblMember";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery(); //실행
+			while(rs.next()) {
+				MemberBean bean = 
+						new MemberBean(rs.getInt("id"),
+								rs.getString("name"),rs.getString("phone"),
+								rs.getString("address"),rs.getString("team"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con,pstmt,rs);
+		}
+		return vlist;
+	}
+	
+	//한명의 회원정보
+	public MemberBean select(int id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		MemberBean bean = new MemberBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from tblMember where id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, id); //id = 3;
+			rs = pstmt.executeQuery(); //실행
+			if(rs.next()) {
+				bean.setId(id);
+				bean.setName(rs.getString("name"));
+				bean.setPhone(rs.getString("phone"));
+				bean.setTeam(rs.getString("team"));
+				bean.setAddress(rs.getString("address"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con,pstmt,rs);
+		}
+		return bean;
+	}
+	
+	//수정
+	public boolean update(MemberBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection(); //pool에서 Connection 빌려옴.
+			sql = "update tblMember set name=?, phone=?, team=?, address=? where id =?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getName()); //첫번쨰 물음표에 '홍길동' 세팅
+			pstmt.setString(2, bean.getPhone());
+			pstmt.setString(3, bean.getTeam());
+			pstmt.setString(4, bean.getAddress());
+			pstmt.setInt(5, bean.getId());
+			int cnt = pstmt.executeUpdate();
+			if(cnt == 1)flag = true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con,pstmt);
+		}
+		return flag;
+	}
+	
+	//삭제
+	public boolean delete(int id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection(); //pool에서 Connection 빌려옴.
+			sql = "delete from tblMember where id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			int cnt = pstmt.executeUpdate();
+			if(cnt == 1)flag = true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con,pstmt);
+		}
+		return flag;
+	}
+	
+	
+	// team list
+	public Vector<String> listTeam() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<String> vlist = new Vector<>();
+		try {
+			con = pool.getConnection();
+			sql = "select distinct team from tblMember";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery(); //실행
+			while(rs.next()) {
+				vlist.addElement(rs.getString(1));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,9 +213,14 @@ public class MemberMer {
 	
 	
 	public static void main(String[] args) {
-		MemberMer mgr = new MemberMer();
-		mgr.zipcodeRead("강남대로");
+		MemberMgr mgr = new MemberMgr();
+		MemberBean bean = new MemberBean(0,"홍길동","01012345678","산적","부산");
+		System.out.println(mgr.insert(bean));
 	}
+	
+	
+	
+	
 }
 
 
