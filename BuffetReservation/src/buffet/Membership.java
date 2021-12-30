@@ -3,28 +3,57 @@ package buffet;
 public class Membership {
 	private String id;
 	private int password;
+	private int date;
+	private int numbers;
+	private int time;
 	
-	public Membership(String id, int password) {
+	public Membership(String id, int password, int date, int numbers, int time) {
+		super();
 		this.id = id;
 		this.password = password;
+		this.date = date;
+		this.numbers = numbers;
+		this.time = time;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	public int getPassword() {
 		return password;
 	}
+
 	public void setPassword(int password) {
 		this.password = password;
 	}
-	
-	@Override
-	public String toString() {
-		return "Membership [회원번호=" + id + ", 휴대폰 끝 4자리=" + password + "]";
+
+	public int getDate() {
+		return date;
+	}
+
+	public void setDate(int date) {
+		this.date = date;
+	}
+
+	public int getNumbers() {
+		return numbers;
+	}
+
+	public void setNumbers(int numbers) {
+		this.numbers = numbers;
+	}
+
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
 	}
 	
 	

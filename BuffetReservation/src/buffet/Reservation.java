@@ -8,43 +8,41 @@ public class Reservation {
 	// 호텔 뷔페 이름
 	String title;
 
-	//회원
-//	String currentId;
-//	int currentPassword;
-	
 	// 회원 리스트
 	ArrayList<Membership> members = new ArrayList<>();
 	// 비회원 리스트
 	ArrayList<NonMembership> nonMembers = new ArrayList<>();
 	
-	ArrayList<Book> books = new ArrayList<Book>();
+//	ArrayList<Booked> books = new ArrayList<Booked>();
 	
-
+	private boolean isRunning = true; 
 	Scanner scanner = new Scanner(System.in);
-
-	private int setDate;
 	
 	public void setTitle(String title) {
 		this.title = title;
 	}
 	
-	
+	//isRunning이 false가 되면 종료
+	public void run() {
+		while(isRunning) {
+			reserveBtn();
+		}
+		scanner.close();
+	}
 	
 	
 	// 1번째
-	// 1.예약하기 , 2.예약취소하기 목록
+	// 1.예약하기 , 2.예약조회하기 목록
 	public void reserveBtn() {
+		System.out.println();
 		System.out.println(title + " 뷔페에 오신 것을 환영합니다.");
 		System.out.println("1.예약하기");
 		System.out.println("2.예약조회하기");
+		System.out.println("3.종료");
 		System.out.println("[예약취소문의는 전화로 상담해드립니다.]");
 		System.out.print("#  선택 -> ");
-		int yesOrNo = scanner.nextInt();
-		printReserveList(yesOrNo);
-	}
-	
-	// 예약 또는 예약취소를 선택했을때 출력하기 
-	public void printReserveList(int yesOrNo) {
+		String s = scanner.nextLine();
+		int yesOrNo = Integer.parseInt(s); 
 		switch(yesOrNo) {
 			case 1 :
 				memberCheck();
@@ -52,10 +50,14 @@ public class Reservation {
 			case 2 : 
 				reserveCheck();
 				break;
+			case 3 : 
+				System.out.println("프로그램 종료");
+				isRunning = false;
+				break;
 			default :
 				System.out.println("다시 선택하여 주세요");
 				reserveBtn();
-		
+				break;
 		}
 	}
 	
@@ -67,7 +69,7 @@ public class Reservation {
 		System.out.println("[로그인 후 레스토랑 예약으로 이동하시겠습니까?]");
 		System.out.println("회원예약(y) / 비회원예약(n)");
 		System.out.print("#  선택 -> ");
-		scanner.nextLine();
+	
 		String isVisited = scanner.nextLine();
 		
 		switch(isVisited) {
@@ -90,17 +92,15 @@ public class Reservation {
 	public void membership() {
 		System.out.println("==============");
 		String user = inputId(1);
-//		currentId = user;
-		
+
 		System.out.println("==============");
 		int password = inputPassword(1);
-//		currentPassword = password;
 		
 		//멤버 리스트에 저장하기 				
-		Membership member = new Membership(user,password);
+		Membership member = new Membership(user,password,0,0,0);
 		members.add(member);
 		System.out.println("==============");
-		System.out.printf("반갑습니다. %s님 ",member.getId());
+		System.out.printf("반갑습니다. %s님!",member.getId());
 		
 		reservingStep();
 		
@@ -108,7 +108,7 @@ public class Reservation {
 	// 3번째 비회원 예약하기
 	public void nonMembership() {
 		System.out.println("==============");
-		String name = inputId(1);
+		String name = inputId(2);
 		
 		
 		System.out.println("==============");
@@ -116,10 +116,10 @@ public class Reservation {
 		
 		NonMembership nonMember =  new NonMembership(name,phone);
 		nonMembers.add(nonMember);
-		System.out.printf("반갑습니다. %s", nonMember.getName()); 
+		System.out.printf("반갑습니다. %s님!", nonMember.getName()); 
 		
 		reservingStep();
-	
+		
 		//예약 확인해주기
 		//비회원 예약은 정가 가격
 		
@@ -129,15 +129,15 @@ public class Reservation {
 	private String inputId(int mode) {
 		String result = null;
 		switch(mode) {
-			case 1 :
+			case 1 : //회원id
 				while(true) {
 					System.out.println("회원 아이디를 입력해주세요");
 					System.out.print("회원 아이디 > ");
 					result = scanner.nextLine();
-					System.out.println(result);
 					
-					if (result.isEmpty()) {
+					if (result.trim().isEmpty()) {
 						System.out.println("회원 아이디는 공백을 허용하지 않습니다.");
+						System.out.println("==============");
 					}else {
 						System.out.println("아이디 입력완료");
 						break;
@@ -146,13 +146,15 @@ public class Reservation {
 				}
 				break;
 				
-			case 2 : 
+			case 2 : //비회원 성명
 				while(true) {
 					System.out.println("고객님의 성명을 입력해주세요");
+					System.out.print("고객님 성명 > ");
 					result = scanner.nextLine();
 					
-					if (result.isEmpty()) {
+					if (result.trim().isEmpty()) {
 						System.out.println("공백을 허용하지 않습니다.");
+						System.out.println("==============");
 					}else {
 						break;
 					}
@@ -163,18 +165,26 @@ public class Reservation {
 	}
 	// 회원은 password / 비회원은 전화번호 뒷자리
 	private int inputPassword(int mode) {
-		
-		String result2 = "";
+		int result2 = 0;
 		switch(mode) {
 			case 1 :
 				while(true) {
 					System.out.println("비밀번호를 4자리를 입력해주세요");
 					System.out.print("회원 비번 > ");
-					scanner.nextInt();
-					result2 = scanner.nextInt();
-					if(4 > result2 && 4 < result2) {
+					String s = scanner.nextLine();
+					try {
+						result2 = Integer.parseInt(s);						
+					} catch (Exception e) {
+						System.out.println("비밀번호는 숫자로만 적으세요");
+						System.out.println("==============");
+						continue; //다시 while 첫 반복문으로 돌아감
+					}
+					if(s.length() < 4 || s.length() > 4) {
 						System.out.println("비밀번호는 4자리 입니다.");
-					}else {
+						System.out.println("==============");
+						continue;
+					}
+					else {
 						break;
 					}
 				}
@@ -182,11 +192,19 @@ public class Reservation {
 			case 2 : 
 				while(true) {
 					System.out.println("고객님의 번호 뒷자리 4자리를 입력해주세요");
-					scanner.nextInt();
-					result2 = scanner.nextInt();
-					
-					if(4 > result2 && 4 < result2) {
-						 System.out.println("연락처 끝에 4자리를 입력해주세요");
+					System.out.print("휴대폰 뒷번호 4자리 > ");
+					String s = scanner.nextLine();
+					try {
+						result2 = Integer.parseInt(s);
+					} catch (Exception e) {
+						System.out.println("연락처 끝에 4자리를 입력해주세요");
+						System.out.println("==============");
+						continue;
+					}
+					if(s.length() < 4 || s.length() > 4) {
+						 System.out.println("연락처 끝 4자리를 입력해주세요");
+						 System.out.println("==============");
+						 continue;
 					}
 					break;
 				}
@@ -199,56 +217,120 @@ public class Reservation {
 	// 예약하는 과정
 	public void reservingStep() {
 		//1.방문 일자 선택
+		int setDate = 0;
 		System.out.println();
-		System.out.println("==============");
-		System.out.println("Step1 이번 달 방문 예정 일시 선택 ");
-		System.out.printf("#  방물일자 -> ");
-		int setDate = scanner.nextInt();
-		System.out.println("2022년 이번 달 " + setDate +"일 을 선택하셨습니다. ");
-		
-		//2.예약인원 선택
-		System.out.println("==============");
-		System.out.printf("Step2 예약 인원 > ");
-		int setCount = scanner.nextInt();
-		System.out.println("예약인원은 " + setCount +"명 입니다. ");
-		
-		//3.예약시간대 선택
-		System.out.println("==============");
-		System.out.println("Step3 예약 시간대\n(1부 19:00 ~ 19:40\r\n"
-										+ "-2부 20:00 ~ 20:40\r\n"
-										+ "-3부 21:00 ~ 21:40\r\n"
-										+ "-4부 22:00 ~ 22:40) ");
-		System.out.printf("이용 시간대 > ");
-		int setTime = scanner.nextInt();
-		if (setTime < 0 || setTime > 4) {
-			System.out.println(" 범위를 벗어났습니다. 다시 선택해주세요");
-			setTime = scanner.nextInt();			
-		}else {
-			System.out.println("선택하신 예약시간은 " + setTime +"부 입니다. ");			
-		}
-		
-		//예약한 정보들 저장. 회원 비회원은?
-		//예약 조회            
-		Book b = new Book(setDate,setCount,setTime);
-		books.add(b);		
-	}
-	
-	private void reserveCheck() {
-		System.out.println("조회합니다");
-		
-		String id = inputId(1);
-		
-		for(Membership each : members) {
-			String eachId = each.getId();
-			
-			if(id.equals(eachId)) {
-				System.out.printf("%s");
+		while(true) {
+			System.out.println("==============");
+			System.out.println("Step1 이번 달 방문 예정 일시 선택 ");
+			System.out.printf("#  방문일자 -> ");
+			String s = scanner.nextLine();
+			try {
+				setDate = Integer.parseInt(s);
+			} catch (Exception e) {
+				System.out.println(" *방문하실 일자만 적어주세요");
+				continue;
 			}
+			System.out.println("2022년 이번 달 " + setDate +"일 을 선택하셨습니다. ");
+			break;
 		}
-		
+		//2.예약인원 선택
+		int setCount = 0;
+		while(true) {
+			System.out.println("==============");
+			System.out.printf("Step2 예약 인원 > ");
+			String s = scanner.nextLine();
+			try {
+				setCount = Integer.parseInt(s);
+			} catch (Exception e) {
+				System.out.println(" *인원숫자만 적어주세요");
+				continue;
+			}
+			System.out.println("예약인원은 " + setCount +"명 입니다. ");
+			break;
+		}
+		//3.예약시간대 선택
+		int setTime = 0;
+		while(true) {
+			System.out.println("==============");
+			System.out.println("Step3 예약 시간대\n(1부 19:00 ~ 19:40\r\n"
+					+ "-2부 20:00 ~ 20:40\r\n"
+					+ "-3부 21:00 ~ 21:40\r\n"
+					+ "-4부 22:00 ~ 22:40) ");
+			System.out.printf("이용 시간대 > ");
+			String s = scanner.nextLine();
+			try {
+				setTime = Integer.parseInt(s);
+			} catch (Exception e) {
+				System.out.println(" *몇 부에 방문하실건지 숫자로 적어주세요");
+				continue;
+			}
+			if (setTime < 0 || setTime > 4) {
+				System.out.println(" 범위를 벗어났습니다. 다시 선택해주세요");
+				setTime = scanner.nextInt();			
+			}else {
+				System.out.println("선택하신 예약시간은 " + setTime +"부 입니다. ");			
+			}
+			break;
+		}
+
+		//예약 확인         
+		Membership b = new Membership(null,0,setDate,setCount,setTime);
+		members.add(b);	
+		System.out.println("==============");
+		System.out.printf("📆이번 달 %d일 / ⏱예약 시간대 %d부 / 🙍‍♀ 인원수 %d명\n",setDate,setTime,setCount);
+		System.out.println("예약해 주셔서 감사합니다.");
+		System.out.println("\r\n"
+				+ "[TEL +82 - 023177131]\r\n"
+				+ "[ADDRESS 서울 중구 을지로 30 (소공동, 롯데호텔) Main Tower 1층]");
+		System.out.println("==============");
 	}
 	
+	//조회하기
+	private void reserveCheck() {
+		//회원 비회원 묻기
+		System.out.println("회원이신가요? (y) / 비회원이신가요?(n)");
+		System.out.print("#  선택 -> ");
 	
+		String isVisited = scanner.nextLine();
+		switch(isVisited) {
+		case "y":
+		case "Y":
+			memberShowCheck();
+			break;
+		case "n":
+		case "N":
+//			nonMemberCheck();
+			break;
+		default:
+			System.out.println("다시 입력해주세요");
+			System.out.println();
+			reserveCheck();
+			break;
+		}
+	}			
+		
+		//회원 ) 예약확인을 위한 비밀번호 입력
+	private void memberShowCheck() {
+		
+		
+		int password = inputPassword(1);
+		
+//		boolean isCheck = false;
+		for(Membership each : members) {
+			int eachPassword = each.getPassword(); //회원 비번만 
+			
+			if(password == eachPassword) {
+				System.out.println("조회 중 입니다...");
+				System.out.printf("📆이번 달 %d일 / ⏱예약 시간대 %d부 / 🙍‍♀ 인원수 %d명\n",each.getDate(),each.getTime(),each.getNumbers());
+				System.out.println("==============");
+//				isCheck = true;
+			}else {
+				System.out.println("비밀번호가 맞지않거나 예약조회가 불가능합니다.");
+			}
+			break;
+			
+		}
+	}
 }
 
 

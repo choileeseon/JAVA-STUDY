@@ -1,13 +1,13 @@
 package buffet;
-
-public class Book {
+//예약날짜, 인원수, 예약시간
+public class Booked {
 	private int date;
 	private int numbers;
 	private int time;
-//	private String id;
-//	private int password;
+//	private String passwordBook;
+
 	
-	public Book(int date, int numbers, int time) {
+	public Booked(int date, int numbers, int time) {
 		super();
 		this.date = date;
 		this.numbers = numbers;
