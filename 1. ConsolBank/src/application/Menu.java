@@ -58,7 +58,6 @@ public class Menu {
 
         String id = input(1);
         String password = input(2);
-
         System.out.println("계좌가 개설되었습니다!");
         mAccounts.add(new Account(id, password, 0));
     }
